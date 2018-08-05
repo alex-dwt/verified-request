@@ -1,0 +1,19 @@
+{
+    "name": "alex-dwt/verified-request",
+    "type": "symfony-bundle",
+    "description": "Aggregates input parameters from http request into one object and apply validation rules to them",
+    "homepage": "https://github.com/alex-dwt/verified-request",
+    "license": "MIT",
+    "authors": [
+        { "name": "Alexander Lukashevich", "email": "aleksandr.dwt@gmail.com" }
+    ],
+    "require": {
+        "php": "^7.1",
+        "symfony/framework-bundle": "^4",
+        "symfony/dependency-injection": "^4",
+        "symfony/yaml": "^4"
+    },
+    "autoload": {
+        "psr-4": { "AlexDwt\\VerifiedRequestBundle\\": "src/" }
+    }
+}
