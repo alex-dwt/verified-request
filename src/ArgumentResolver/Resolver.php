@@ -8,7 +8,28 @@
 
 namespace AlexDwt\VerifiedRequestBundle\ArgumentResolver;
 
-class Resolver
-{
+use AlexDwt\VerifiedRequestBundle\Request\VerifiedRequest;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
+class Resolver implements ArgumentValueResolverInterface
+{
+    public function supports(Request $request, ArgumentMetadata $argument)
+    {
+        return (new \ReflectionClass($argument->getType()))
+            ->isSubclassOf(VerifiedRequest::class);
+    }
+
+    public function resolve(Request $request, ArgumentMetadata $argument)
+    {
+        $requestClassName = $argument->getType();
+
+        /** @var VerifiedRequest $result */
+        $result = new $requestClassName();
+
+        $result->setInputParams([]);
+
+        yield $result;
+    }
 }

@@ -11,5 +11,10 @@ services:
 
     alexdwt_verifiedrequest.exception_listener:
         class: AlexDwt\VerifiedRequestBundle\EventListener\ExceptionListener
+        arguments:
+            $incorrectInputParamsResponse: '@alexdwt_verifiedrequest.incorrect_input_params_response'
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    alexdwt_verifiedrequest.incorrect_input_params_response:
+        class: AlexDwt\VerifiedRequestBundle\Response\IncorrectInputParamsResponse

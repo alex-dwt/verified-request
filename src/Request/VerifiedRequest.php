@@ -53,7 +53,7 @@ abstract class VerifiedRequest
     {
         $isValid = true;
 
-        $message = '';
+        $message = 'validation errors';
 
         if (!$isValid) {
             throw new IncorrectInputParamsException($message);

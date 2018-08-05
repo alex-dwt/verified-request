@@ -8,38 +8,34 @@
 
 namespace AlexDwt\VerifiedRequestBundle\EventListener;
 
+use AlexDwt\VerifiedRequestBundle\Exception\IncorrectInputParamsException;
+use AlexDwt\VerifiedRequestBundle\Response\IncorrectInputParamsResponseInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class ExceptionListener
 {
+    /**
+     * @var IncorrectInputParamsResponseInterface
+     */
+    private $incorrectInputParamsResponse;
+
+    public function __construct(IncorrectInputParamsResponseInterface $incorrectInputParamsResponse)
+    {
+        $this->incorrectInputParamsResponse = $incorrectInputParamsResponse;
+    }
+
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-//        // You get the exception object from the received event
-//        $exception = $event->getException();
-//        $message = sprintf(
-//            'My Error says: %s with code: %s',
-//            $exception->getMessage(),
-//            $exception->getCode()
-//        );
-//
-//        return;
-//
-//        // Customize your response object to display the exception details
-//        $response = new Response();
-//        $response->setContent($message);
-//
-//        // HttpExceptionInterface is a special type of exception that
-//        // holds status code and header details
-//        if ($exception instanceof HttpExceptionInterface) {
-//            $response->setStatusCode($exception->getStatusCode());
-//            $response->headers->replace($exception->getHeaders());
-//        } else {
-//            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-//        }
-//
-//        // sends the modified response object to the event
-//        $event->setResponse($response);
+        $exception = $event->getException();
+
+        if (!$exception instanceof IncorrectInputParamsException) {
+            return;
+        }
+
+        $event->setResponse(
+            $this
+                ->incorrectInputParamsResponse
+                ->getResponse($exception->getMessage())
+        );
     }
 }

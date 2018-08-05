@@ -6,17 +6,20 @@
  * For the full copyright and license information, please view the LICENSE file that was distributed with this source code.
  */
 
-namespace AlexDwt\VerifiedRequestBundle\Request;
+namespace AlexDwt\VerifiedRequestBundle\Response;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class CatchableVerifiedRequest extends VerifiedRequest
+class IncorrectInputParamsResponse implements IncorrectInputParamsResponseInterface
 {
     public function getResponse(string $errorMessage): Response
     {
         return new JsonResponse(
-            ['errorMessage' => $errorMessage],
+            [
+                'errorMessage' => $errorMessage,
+                'errorCode' => 422
+            ],
             422
         );
     }
