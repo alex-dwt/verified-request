@@ -9,12 +9,23 @@
 namespace AlexDwt\VerifiedRequestBundle\ArgumentResolver;
 
 use AlexDwt\VerifiedRequestBundle\Request\VerifiedRequest;
+use AlexDwt\VerifiedRequestBundle\Request\VerifiedRequestCreator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 class Resolver implements ArgumentValueResolverInterface
 {
+    /**
+     * @var VerifiedRequestCreator
+     */
+    private $requestCreator;
+
+    public function __construct(VerifiedRequestCreator $requestCreator)
+    {
+        $this->requestCreator = $requestCreator;
+    }
+
     public function supports(Request $request, ArgumentMetadata $argument)
     {
         return (new \ReflectionClass($argument->getType()))
@@ -23,13 +34,6 @@ class Resolver implements ArgumentValueResolverInterface
 
     public function resolve(Request $request, ArgumentMetadata $argument)
     {
-        $requestClassName = $argument->getType();
-
-        /** @var VerifiedRequest $result */
-        $result = new $requestClassName();
-
-        $result->setInputParams([]);
-
-        yield $result;
+        yield $this->requestCreator->createFromRequest($argument->getType(), $request);
     }
 }

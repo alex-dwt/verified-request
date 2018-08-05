@@ -18,15 +18,9 @@ abstract class VerifiedRequest
      */
     private $inputParams;
 
-    public function setInputParams(array $params, bool $runValidation = true): self
+    public function __construct(array $inputParams)
     {
-        $this->inputParams = $params;
-
-        if ($runValidation) {
-            $this->validate();
-        }
-
-        return $this;
+        $this->inputParams = $inputParams;
     }
 
     public function __call($name, $arguments)
@@ -35,7 +29,7 @@ abstract class VerifiedRequest
             && strlen($name) >= 4
         ) {
             $paramName = lcfirst(substr($name, 3));
-            if (in_array($paramName, $this->inputParams, true)) {
+            if (array_key_exists($paramName, $this->inputParams)) {
                 return $this->inputParams[$paramName];
             } else {
                 throw new InputParamNotFoundException(
@@ -47,16 +41,5 @@ abstract class VerifiedRequest
         throw new \RuntimeException('Unsupported method to call');
     }
 
-    abstract protected function getValidationRules(): array;
-
-    private function validate()
-    {
-        $isValid = true;
-
-        $message = 'validation errors';
-
-        if (!$isValid) {
-            throw new IncorrectInputParamsException($message);
-        }
-    }
+    abstract public static function getValidationRules(): array;
 }

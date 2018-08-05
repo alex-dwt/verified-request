@@ -17,8 +17,8 @@ class IncorrectInputParamsResponse implements IncorrectInputParamsResponseInterf
     {
         return new JsonResponse(
             [
-                'errorMessage' => $errorMessage,
-                'errorCode' => 422
+                'message' => $errorMessage,
+                'code' => 422
             ],
             422
         );

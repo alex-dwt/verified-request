@@ -9,7 +9,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "symfony/framework-bundle": "^4",
+        "symfony/validator": "^4",
         "symfony/dependency-injection": "^4",
         "symfony/yaml": "^4"
     },

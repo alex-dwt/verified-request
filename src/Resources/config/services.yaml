@@ -6,8 +6,14 @@ services:
 
     alexdwt_verifiedrequest.argument_resolver:
         class: AlexDwt\VerifiedRequestBundle\ArgumentResolver\Resolver
+        arguments:
+            $requestCreator: '@alexdwt_verifiedrequest.request_creator'
         tags:
             - { name: controller.argument_value_resolver, priority: 50 }
+
+    alexdwt_verifiedrequest.request_creator:
+        class: AlexDwt\VerifiedRequestBundle\Request\VerifiedRequestCreator
+        autowire: true
 
     alexdwt_verifiedrequest.exception_listener:
         class: AlexDwt\VerifiedRequestBundle\EventListener\ExceptionListener
