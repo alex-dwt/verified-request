@@ -77,6 +77,15 @@ class VerifiedRequestCreator
             }
         }
 
+        // mark optional fields
+        if ($optionalFields = $className::getOptionalFields()) {
+            foreach ($fields as $fieldName => $rules) {
+                if (in_array($fieldName, $optionalFields)) {
+                    $fields[$fieldName] = new Assert\Optional($rules);
+                }
+            }
+        }
+
         $constraints = new Assert\Collection([
             'fields' => $fields,
 //            'allowMissingFields' => true,

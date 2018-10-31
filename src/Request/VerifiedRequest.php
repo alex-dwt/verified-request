@@ -8,9 +8,6 @@
 
 namespace AlexDwt\VerifiedRequestBundle\Request;
 
-use AlexDwt\VerifiedRequestBundle\Exception\IncorrectInputParamsException;
-use AlexDwt\VerifiedRequestBundle\Exception\InputParamNotFoundException;
-
 abstract class VerifiedRequest
 {
     /**
@@ -32,9 +29,7 @@ abstract class VerifiedRequest
             if (array_key_exists($paramName, $this->inputParams)) {
                 return $this->inputParams[$paramName];
             } else {
-                throw new InputParamNotFoundException(
-                    "Requested input param '$paramName' is not found"
-                );
+                return null;
             }
         }
 
@@ -42,4 +37,9 @@ abstract class VerifiedRequest
     }
 
     abstract public static function getValidationRules(): array;
+
+    public static function getOptionalFields(): array
+    {
+        return [];
+    }
 }
