@@ -36,6 +36,11 @@ abstract class VerifiedRequest
         throw new \RuntimeException('Unsupported method to call');
     }
 
+    public function getInputArray(): array
+    {
+        return $this->inputParams;
+    }
+
     abstract public static function getValidationRules(): array;
 
     public static function getOptionalFields(): array
