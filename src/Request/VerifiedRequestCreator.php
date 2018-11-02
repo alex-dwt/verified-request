@@ -78,7 +78,7 @@ class VerifiedRequestCreator
         }
 
         // mark optional fields
-        if ($optionalFields = $className::getOptionalFields()) {
+        if ($optionalFields = array_keys($className::getOptionalFields())) {
             foreach ($fields as $fieldName => $rules) {
                 if (in_array($fieldName, $optionalFields)) {
                     $fields[$fieldName] = new Assert\Optional($rules);

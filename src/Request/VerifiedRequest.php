@@ -29,7 +29,7 @@ abstract class VerifiedRequest
             if (array_key_exists($paramName, $this->inputParams)) {
                 return $this->inputParams[$paramName];
             } else {
-                return null;
+                return static::getOptionalFields()[$paramName] ?? null;
             }
         }
 
