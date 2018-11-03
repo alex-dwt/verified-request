@@ -27,11 +27,11 @@ abstract class VerifiedRequest
      */
     private $validator;
 
-    public function __construct(ValidatorInterface $validator, RequestStack $stack)
+    public function __construct(ValidatorInterface $validator, RequestStack $requestStack)
     {
         $this->validator = $validator;
 
-        if ($request = $this->requestStack->getCurrentRequest()) {
+        if ($request = $requestStack->getCurrentRequest()) {
             $this->populateFromRequest($request);
         }
     }
