@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class VerifiedRequest
 {
@@ -26,15 +27,13 @@ abstract class VerifiedRequest
      */
     private $validator;
 
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
     public function __construct(ValidatorInterface $validator, RequestStack $stack)
     {
         $this->validator = $validator;
-        $this->requestStack = $stack;
+
+        if ($request = $this->requestStack->getCurrentRequest()) {
+            $this->populateFromRequest($request);
+        }
     }
 
     public function __call($name, $arguments)
@@ -64,6 +63,17 @@ abstract class VerifiedRequest
         return $this->inputParams;
     }
 
+    public function populateFromArray(array $inputParams, bool $runValidation = true): self
+    {
+        if ($runValidation) {
+            $this->validate($inputParams);
+        }
+
+        $this->inputParams = $inputParams;
+
+        return $this;
+    }
+
     abstract protected function getValidationRules(): array;
 
     protected function getOptionalFields(): array
@@ -71,12 +81,8 @@ abstract class VerifiedRequest
         return [];
     }
 
-    public function populateFromRequest(): self
+    private function populateFromRequest(Request $request)
     {
-        if (!$request = $this->requestStack->getCurrentRequest()) {
-            throw new \RuntimeException('CurrentRequest is empty');
-        }
-
         $inputParams = array_merge(
             $request->query->all(),
             $request->request->all(),
@@ -86,15 +92,6 @@ abstract class VerifiedRequest
         $this->validate($inputParams);
 
         $this->inputParams = $inputParams;
-
-        return $this;
-    }
-
-    public function populateFromArray(array $inputParams): self
-    {
-        $this->inputParams = $inputParams;
-
-        return $this;
     }
 
     private function validate(array &$params)
