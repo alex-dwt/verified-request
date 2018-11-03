@@ -39,14 +39,16 @@ abstract class VerifiedRequest
 
     public function __call($name, $arguments)
     {
+        $inputParams = $this->getInputParams();
+
         if (substr($name, 0, 3) === 'get'
             && strlen($name) >= 4
         ) {
             $paramName = lcfirst(substr($name, 3));
-            if (array_key_exists($paramName, $this->inputParams)) {
-                return $this->inputParams[$paramName];
+            if (array_key_exists($paramName, $inputParams)) {
+                return $inputParams[$paramName];
             } else {
-                return static::getOptionalFields()[$paramName] ?? null;
+                return $this->getOptionalFields()[$paramName] ?? null;
             }
         }
 
