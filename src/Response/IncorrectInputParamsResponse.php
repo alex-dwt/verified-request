@@ -13,12 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IncorrectInputParamsResponse implements IncorrectInputParamsResponseInterface
 {
-    public function getResponse(string $errorMessage): Response
+    public function getResponse(array $errors): Response
     {
         return new JsonResponse(
             [
-                'message' => $errorMessage,
-                'code' => 422
+                'message' => 'Validation failed',
+                'errors' => $errors,
+                'code' => 422,
             ],
             422
         );

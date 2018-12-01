@@ -35,7 +35,7 @@ class ExceptionListener
         $event->setResponse(
             $this
                 ->incorrectInputParamsResponse
-                ->getResponse($exception->getMessage())
+                ->getResponse($exception->getErrors())
         );
     }
 }

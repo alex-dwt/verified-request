@@ -12,8 +12,25 @@ use Throwable;
 
 class IncorrectInputParamsException extends \RuntimeException
 {
+    /**
+     * @var array
+     */
+    private $errors = [];
+
     public function __construct(string $message = "", int $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
+    }
+
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    public function setErrors(array $errors): self
+    {
+        $this->errors = $errors;
+
+        return $this;
     }
 }

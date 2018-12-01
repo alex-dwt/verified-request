@@ -140,15 +140,13 @@ abstract class VerifiedRequest
                 $constraints
             )
         )) {
-            $message = '';
+            $errors = [];
+
             foreach ($violations as $violation) {
-                $message .= sprintf(
-                    "%s: %s\r\n",
-                    $violation->getPropertyPath(),
-                    $violation->getMessage()
-                );
+                $errors[trim($violation->getPropertyPath(), '[]')][] = $violation->getMessage();
             }
-            throw new IncorrectInputParamsException($message);
+
+            throw (new IncorrectInputParamsException())->setErrors($errors);
         }
     }
 }

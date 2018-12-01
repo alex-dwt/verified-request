@@ -12,5 +12,5 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface IncorrectInputParamsResponseInterface
 {
-    public function getResponse(string $errorMessage): Response;
+    public function getResponse(array $errors): Response;
 }
