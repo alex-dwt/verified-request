@@ -9,7 +9,6 @@
 namespace AlexDwt\VerifiedRequestBundle\Request;
 
 use AlexDwt\VerifiedRequestBundle\Exception\IncorrectInputParamsException;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,13 +26,9 @@ abstract class VerifiedRequest
      */
     private $validator;
 
-    public function __construct(ValidatorInterface $validator, RequestStack $requestStack)
+    public function __construct(ValidatorInterface $validator)
     {
         $this->validator = $validator;
-
-        if ($request = $requestStack->getCurrentRequest()) {
-            $this->populateFromRequest($request);
-        }
     }
 
     public function __call($name, $arguments)
@@ -74,14 +69,7 @@ abstract class VerifiedRequest
         return $this;
     }
 
-    abstract protected function getValidationRules(): array;
-
-    protected function getOptionalFields(): array
-    {
-        return [];
-    }
-
-    private function populateFromRequest(Request $request)
+    public function populateFromRequest(Request $request): self
     {
         $inputParams = array_merge(
             $request->query->all(),
@@ -92,6 +80,15 @@ abstract class VerifiedRequest
         $this->validate($inputParams);
 
         $this->inputParams = $inputParams;
+
+        return $this;
+    }
+
+    abstract protected function getValidationRules(): array;
+
+    protected function getOptionalFields(): array
+    {
+        return [];
     }
 
     private function validate(array &$params)
