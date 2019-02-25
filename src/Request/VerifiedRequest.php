@@ -72,6 +72,7 @@ abstract class VerifiedRequest
     public function populateFromRequest(Request $request): self
     {
         $inputParams = array_merge(
+	    $request->files->all(),
             $request->query->all(),
             $request->request->all(),
             (array) json_decode(file_get_contents('php://input'), true)
