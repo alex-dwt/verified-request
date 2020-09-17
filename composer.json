@@ -9,9 +9,9 @@
     ],
     "require": {
         "php": "^7.1",
-        "symfony/validator": "^4||^5",
-        "symfony/dependency-injection": "^4||^5",
-        "symfony/yaml": "^4||^5"
+        "symfony/validator": "^5",
+        "symfony/dependency-injection": "^5",
+        "symfony/yaml": "^5"
     },
     "autoload": {
         "psr-4": { "AlexDwt\\VerifiedRequestBundle\\": "src/" }

@@ -10,7 +10,7 @@ namespace AlexDwt\VerifiedRequestBundle\EventListener;
 
 use AlexDwt\VerifiedRequestBundle\Exception\IncorrectInputParamsException;
 use AlexDwt\VerifiedRequestBundle\Response\IncorrectInputParamsResponseInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 class ExceptionListener
 {
@@ -24,9 +24,9 @@ class ExceptionListener
         $this->incorrectInputParamsResponse = $incorrectInputParamsResponse;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         if (!$exception instanceof IncorrectInputParamsException) {
             return;
